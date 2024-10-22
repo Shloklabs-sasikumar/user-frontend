@@ -3,7 +3,6 @@ import 'package:benchtask/app/core/local_db/local_db_storage_utils.dart';
 import 'package:benchtask/app/core/use_case_injection/use_case_injection.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/theme_cubit.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/user_bloc.dart';
-import 'package:benchtask/app/feature/register/presentation/screens/register.dart';
 import 'package:benchtask/app/feature/register/presentation/screens/users_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

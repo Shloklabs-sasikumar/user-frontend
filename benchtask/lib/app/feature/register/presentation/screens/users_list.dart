@@ -45,6 +45,15 @@ class _UsersListState extends State<UsersList> {
           },
         ),
         body: BlocBuilder<UserBloc, UserState>(
+          buildWhen: (previousState, currentState) {
+            // Rebuild only when the user list changes (i.e., RegistrationSuccess state)
+            if (currentState is RegistrationSuccess && previousState is RegistrationSuccess) {
+
+              return previousState.users != currentState.users;
+            }
+            // Rebuild when transitioning from loading or error to success
+            return currentState is RegistrationSuccess;
+          },
           builder: (context, state) {
             if (state is RegistrationLoading) {
               return const Center(child: CircularProgressIndicator());
