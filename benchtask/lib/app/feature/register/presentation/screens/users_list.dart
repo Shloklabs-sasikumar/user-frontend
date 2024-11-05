@@ -47,6 +47,7 @@ class _UsersListState extends State<UsersList> {
         body: BlocBuilder<UserBloc, UserState>(
           buildWhen: (previousState, currentState) {
             // Rebuild only when the user list changes (i.e., RegistrationSuccess state)
+
             if (currentState is RegistrationSuccess && previousState is RegistrationSuccess) {
 
               return previousState.users != currentState.users;

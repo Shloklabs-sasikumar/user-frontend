@@ -66,10 +66,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     // Handles DeleteUserEvent when a user is deleted
     on<DeleteUserEvent>((event, emit) async {
+      emit(RegistrationInitial());
       try {
-        // Emit loading state while the user is being deleted
-        emit(RegistrationLoading());
-
         // Call use case to delete the user by ID
         bool deleteResponse = await userUseCases.deleteUserById(event.user.id.toString());
 
