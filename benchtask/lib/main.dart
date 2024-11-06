@@ -4,6 +4,7 @@ import 'package:benchtask/app/core/use_case_injection/use_case_injection.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/theme_cubit.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/user_bloc.dart';
 import 'package:benchtask/app/feature/register/presentation/screens/users_list.dart';
+import 'package:benchtask/app/feature/timer/presentation/screens/timer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,7 +44,7 @@ class LaunchScreen extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const UsersList(),
+        home:  TimerScreen(),
       ),
     );
   }
