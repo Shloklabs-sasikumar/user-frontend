@@ -12,21 +12,18 @@ class TimerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TimerBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Simple Task Timer'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TimerDisplay(),
-              const SizedBox(height: 50),
-              TimerControls(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Simple Task Timer'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TimerDisplay(),
+            const SizedBox(height: 50),
+            TimerControls(),
+          ],
         ),
       ),
     );

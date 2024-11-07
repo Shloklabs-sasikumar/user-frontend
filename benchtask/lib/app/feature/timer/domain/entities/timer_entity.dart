@@ -1,26 +1,25 @@
-// lib/domain/entities/task.dart
 import 'package:equatable/equatable.dart';
 
-class Task extends Equatable{
-  final String name;
-  final DateTime startTime;
-  final Duration duration;
+class TimerEntity extends Equatable{
+  final DateTime? startTime;
+  final Duration elapsed;
+  final bool isRunning;
 
-  Task({
-    required this.name,
+  TimerEntity({
     required this.startTime,
-    required this.duration,
+    required this.elapsed,
+    required this.isRunning,
   });
 
-  Task copyWith({String? name, DateTime? startTime, Duration? duration}) {
-    return Task(
-      name: name ?? this.name,
+  TimerEntity copyWith({DateTime? startTime, Duration? elapsed, bool? isRunning}) {
+    return TimerEntity(
       startTime: startTime ?? this.startTime,
-      duration: duration ?? this.duration,
+      elapsed: elapsed ?? this.elapsed,
+      isRunning: isRunning ?? this.isRunning,
     );
   }
 
   @override
   // TODO: implement props
-  List<Object?> get props => [name, startTime, duration];
+  List<Object?> get props =>[startTime, elapsed, isRunning];
 }

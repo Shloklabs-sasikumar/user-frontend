@@ -4,6 +4,8 @@ import 'package:benchtask/app/core/use_case_injection/use_case_injection.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/theme_cubit.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/user_bloc.dart';
 import 'package:benchtask/app/feature/register/presentation/screens/users_list.dart';
+import 'package:benchtask/app/feature/timer/infrastructure/repositories_impl/timer_repository_impl.dart';
+import 'package:benchtask/app/feature/timer/presentation/bloc/timer_bloc.dart';
 import 'package:benchtask/app/feature/timer/presentation/screens/timer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +34,10 @@ class LaunchScreen extends StatelessWidget {
             create: (context) => UserBloc(
                   useCasedependencies.userUseCases,
                 )),
+        BlocProvider<TimerBloc>(
+            create: (context) => TimerBloc(
+              useCasedependencies.timerUseCases,
+            )),
       ],
       child: MaterialApp(
         theme: ThemeData(
