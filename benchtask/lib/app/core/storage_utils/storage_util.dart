@@ -7,21 +7,16 @@ abstract class StorageUtil {
 }
 
 class StorageUtility implements StorageUtil {
-  // Singleton instance
   static final StorageUtility _instance = StorageUtility._internal();
 
-  // Factory constructor
   factory StorageUtility() {
     return _instance;
   }
 
-  // Private constructor for singleton pattern
   StorageUtility._internal();
 
-  // Underlying storage implementation
   late StorageUtil _storage;
 
-  // Method to initialize the storage implementation
   void init(StorageUtil storageImplementation) {
     _storage = storageImplementation;
   }

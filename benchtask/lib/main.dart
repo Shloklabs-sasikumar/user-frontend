@@ -1,10 +1,11 @@
 import 'package:benchtask/app/core/local_db/local_db_impl.dart';
 import 'package:benchtask/app/core/local_db/local_db_storage_utils.dart';
+import 'package:benchtask/app/core/storage_utils/secure_storage_impl.dart';
+import 'package:benchtask/app/core/storage_utils/storage_util.dart';
 import 'package:benchtask/app/core/use_case_injection/use_case_injection.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/theme_cubit.dart';
 import 'package:benchtask/app/feature/register/presentation/bloc/user_bloc.dart';
-import 'package:benchtask/app/feature/register/presentation/screens/users_list.dart';
-import 'package:benchtask/app/feature/timer/infrastructure/repositories_impl/timer_repository_impl.dart';
+
 import 'package:benchtask/app/feature/timer/presentation/bloc/timer_bloc.dart';
 import 'package:benchtask/app/feature/timer/presentation/screens/timer_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() async {
   // Use cases injection
   UseCaseProvider().initialize();
   LocalStorageUtility().init(LocalStorageImpl());
+  StorageUtility().init(SecureStorageImpl());
   runApp(const LaunchScreen());
 }
 
