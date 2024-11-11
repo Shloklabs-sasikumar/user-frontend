@@ -8,7 +8,7 @@ class TimerDataSource {
   /// Instance of [SecureStorageImpl] used for secure data storage operations.
   SecureStorageImpl secureStorageImpl = SecureStorageImpl();
 
-  /// Private constructor to enforce singleton pattern.
+  /// Private constructor to enforce the singleton pattern.
   TimerDataSource._internal();
 
   /// Factory constructor to return the singleton instance of [TimerDataSource].

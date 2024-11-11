@@ -77,4 +77,8 @@ class TimerUseCases {
   Future<void> saveStartTime(DateTime startTime) {
     return _timerRepository.saveStartTime(startTime);
   }
+  /// Returns `true` if the timer is running, otherwise `false`.
+  Future<bool> isTimerRunning() async {
+    return await _timerRepository.isTimerRunning();
+  }
 }

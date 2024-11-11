@@ -37,4 +37,9 @@ abstract class TimerRepository {
   ///
   /// [startTime] - The [DateTime] when the timer started.
   Future<void> saveStartTime(DateTime startTime);
+
+  /// Checks if the timer is currently running.
+  ///
+  /// Returns `true` if the timer is running, otherwise `false`.
+  Future<bool> isTimerRunning();
 }
