@@ -1,9 +1,9 @@
-import 'package:benchtask/app/core/local_db/local_db_impl.dart';
-import 'package:benchtask/app/core/local_db/local_db_storage_utils.dart';
+import 'package:benchtask/app/background_service/work_manager.dart';
+import 'package:benchtask/app/core/storage_utils/secure_storage_impl.dart';
+import 'package:benchtask/app/core/storage_utils/storage_util.dart';
 import 'package:benchtask/app/core/use_case_injection/use_case_injection.dart';
-import 'package:benchtask/app/feature/register/presentation/bloc/theme_cubit.dart';
-import 'package:benchtask/app/feature/register/presentation/bloc/user_bloc.dart';
-import 'package:benchtask/app/feature/register/presentation/screens/users_list.dart';
+import 'package:benchtask/app/feature/timer/presentation/bloc/timer_bloc.dart';
+import 'package:benchtask/app/feature/timer/presentation/screens/timer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,8 +11,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Use cases injection
   UseCaseProvider().initialize();
-  LocalStorageUtility().init(LocalStorageImpl());
+  StorageUtility().init(SecureStorageImpl());
+  WorkManager().initialize();
   runApp(const LaunchScreen());
+
 }
 
 class LaunchScreen extends StatelessWidget {
@@ -24,13 +26,11 @@ class LaunchScreen extends StatelessWidget {
     UseCaseProvider useCasedependencies = UseCaseProvider();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(),
-        ),
-        BlocProvider<UserBloc>(
-            create: (context) => UserBloc(
-                  useCasedependencies.userUseCases,
-                )),
+
+        BlocProvider<TimerBloc>(
+            create: (context) => TimerBloc(
+              useCasedependencies.timerUseCases,
+            )),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -43,7 +43,7 @@ class LaunchScreen extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const UsersList(),
+        home:  TimerScreen(),
       ),
     );
   }
