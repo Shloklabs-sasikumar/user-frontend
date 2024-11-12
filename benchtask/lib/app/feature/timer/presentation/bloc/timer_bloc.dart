@@ -60,30 +60,37 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
   Future<void> _onTimerPaused(TimerPaused event, Emitter<TimerState> emit) async {
     try {
       if (_startTime != null) {
-        // Update the accumulated duration with the current elapsed time.
+        // Add the current elapsed time to _accumulatedDuration to account for total time.
         _accumulatedDuration += DateTime.now().difference(_startTime!);
-        _startTime = null; // Clear the start time to indicate the timer is paused.
-      }
-      _stopTicker(); // Stop the periodic ticker.
-      await _timerUseCases.saveElapsedTime(_accumulatedDuration); // Persist the accumulated time.
-      await _timerUseCases.clearStartTime(); // Clear the stored start time.
 
-      // Emit the paused state with updated timer information.
-      emit(state.copyWith(
-        timerEntity: state.timerEntity.copyWith(
-          elapsed: _accumulatedDuration,
-          isRunning: false,
-        ),
-        status: TimerStatus.paused,
-      ));
+        // Clear _startTime since the timer is now paused.
+        _startTime = null;
+
+        // Stop the ticker to pause updates.
+        _stopTicker();
+
+        // Persist the accumulated time and clear the start time in storage.
+        await _timerUseCases.saveElapsedTime(_accumulatedDuration);
+        await _timerUseCases.clearStartTime();
+
+        // Emit the updated state to reflect the paused timer with the correct elapsed time.
+        emit(state.copyWith(
+          timerEntity: state.timerEntity.copyWith(
+            elapsed: _accumulatedDuration,
+            isRunning: false,
+          ),
+          status: TimerStatus.paused,
+        ));
+      }
     } catch (e) {
-      // Handle and emit any errors that occur while pausing the timer.
+      // Handle errors that may occur during the pause operation.
       emit(state.copyWith(
         status: TimerStatus.error,
         errorMessage: "Failed to pause the timer: $e",
       ));
     }
   }
+
 
   /// Handler for [TimerResumed] event.
   /// Resumes the timer by setting a new start time and restarting periodic updates.
@@ -136,17 +143,21 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
   /// Updates the state with the current elapsed duration.
   void _onTimerTicked(TimerTicked event, Emitter<TimerState> emit) {
     // Emit the updated state with the total elapsed time.
-    emit(state.copyWith(
-      timerEntity: state.timerEntity.copyWith(
-        elapsed: event.duration,
-      ),
-    ));
+
+      emit(state.copyWith(
+        timerEntity: state.timerEntity.copyWith(
+          elapsed: event.duration,
+        ),
+      ));
   }
 
   /// Starts the periodic ticker to update elapsed time.
   void _startTicker() {
+    print("Starting ticker with initial duration: $_accumulatedDuration");
+
     // Cancel any existing ticker before starting a new one.
     _ticker?.cancel();
+
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
       if (_startTime != null) {
         // Calculate the current duration since the timer started/resumed.
@@ -158,6 +169,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
       }
     });
   }
+
 
   /// Stops the periodic ticker.
   void _stopTicker() {
@@ -193,22 +205,25 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
   }
 
   /// Loads the initial state of the timer from persistent storage.
+  /// Loads the initial state of the timer from persistent storage.
   Future<void> _loadInitialState() async {
     try {
-      // Retrieve the stored start time and accumulated elapsed time.
+      // Retrieve stored start time and accumulated duration.
       final storedStartTime = await _timerUseCases.getStartTime();
       final storedElapsed = await _timerUseCases.getElapsedTime();
+      final isRunning = await _timerUseCases.isTimerRunning();
 
-      if (storedStartTime != null && await _timerUseCases.isTimerRunning()) {
-        // Calculate the time difference if the timer was running when last saved.
-        final currentTime = DateTime.now();
-        final timeDifference = currentTime.difference(storedStartTime);
+      if (storedStartTime != null && isRunning) {
+        // Calculate the time elapsed since the stored start time.
+        final elapsedSinceStart = DateTime.now().difference(storedStartTime);
 
-        // Combine the stored duration with the time difference for the total.
-        _startTime = storedStartTime;
-        _accumulatedDuration = storedElapsed + timeDifference;
+        // Update _accumulatedDuration to include time since the last stored start.
+        _accumulatedDuration = storedElapsed + elapsedSinceStart;
 
-        // Emit the running state and start the ticker.
+        // Set _startTime to now, as the timer resumes from this point.
+        _startTime = DateTime.now();
+
+        // Emit the running state with the calculated elapsed time.
         emit(state.copyWith(
           timerEntity: TimerEntity(
             startTime: _startTime,
@@ -217,9 +232,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
           ),
           status: TimerStatus.running,
         ));
+
+        // Start the ticker to continue updating in real-time.
         _startTicker();
+
       } else if (storedElapsed > Duration.zero) {
-        // Restore the paused state if the timer was not running.
+        // If the timer was paused, emit the paused state with the correct elapsed time.
         _accumulatedDuration = storedElapsed;
         emit(state.copyWith(
           timerEntity: TimerEntity(
@@ -230,15 +248,16 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> with WidgetsBindingObserver
           status: TimerStatus.paused,
         ));
       } else {
-        // If no data exists, reset to the initial state.
+        // If no data exists, emit the initial state.
         emit(TimerState.initial());
       }
     } catch (e) {
-      // Handle and emit any errors that occur while loading the initial state.
       emit(state.copyWith(
         status: TimerStatus.error,
         errorMessage: "Failed to load initial state: $e",
       ));
     }
   }
+
+
 }
