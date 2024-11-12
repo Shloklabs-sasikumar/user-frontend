@@ -13,12 +13,12 @@ class TimerScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Simple Task Timer'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TimerDisplay(),
-            const SizedBox(height: 50),
+            SizedBox(height: 50),
             TimerControls(),
           ],
         ),

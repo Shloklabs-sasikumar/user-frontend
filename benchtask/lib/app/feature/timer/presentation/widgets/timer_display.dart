@@ -13,7 +13,7 @@ class TimerDisplay extends StatelessWidget {
     return BlocBuilder<TimerBloc, TimerState>(
       builder: (context, state) {
         // Access the TimerEntity from the state
-        final duration = state.timerEntity.elapsed ?? Duration.zero;
+        final duration = state.timerEntity.elapsed ??  Duration.zero;
 
         final hours = duration.inHours.toString().padLeft(2, '0');
         final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');

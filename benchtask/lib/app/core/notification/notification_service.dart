@@ -23,7 +23,7 @@ class TimerNotificationService {
     AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // Define initialization settings for different platforms (only Android in this case).
-    final InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
 
