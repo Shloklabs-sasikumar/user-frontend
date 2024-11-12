@@ -26,10 +26,13 @@ void callbackDispatcher() {
         );
       } else {
         // Timer is paused, show a paused notification.
-        notificationService.showTimerStatusNotification(
-          status: 'Timer paused at: ${elapsed.inHours}:${elapsed.inMinutes.remainder(60)}:${elapsed.inSeconds.remainder(60)}',
-          persist: false,
-        );
+        if(elapsed.inSeconds !=0){
+          notificationService.showTimerStatusNotification(
+            status: 'Timer paused at: ${elapsed.inHours}:${elapsed.inMinutes.remainder(60)}:${elapsed.inSeconds.remainder(60)}',
+            persist: false,
+          );
+        }
+
       }
 
       return Future.value(true); // Indicate the task ran successfully.

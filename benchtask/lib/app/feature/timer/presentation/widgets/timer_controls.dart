@@ -1,4 +1,3 @@
-// lib/presentation/widgets/timer_controls.dart
 
 import 'package:benchtask/app/feature/timer/presentation/bloc/timer_bloc.dart';
 import 'package:benchtask/app/feature/timer/presentation/bloc/timer_event.dart';
@@ -8,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TimerControls extends StatelessWidget {
+  const TimerControls({super.key});
+
   @override
   Widget build(BuildContext context) {
     return  BlocBuilder<TimerBloc, TimerState>(
